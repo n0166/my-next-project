@@ -1,8 +1,10 @@
 import styles from "./page.module.css";
 import Image from "next/image";
+import { getNewsList } from "@/app/_libs/microcms";
+import { TOP_NEWS_LIMIT } from "@/app/_constans";
 import Newslist from "@/app/_components/NewsList";
 import ButtonLink from "@/app/_components/ButtonLink";
-import { News } from "@/app/_libs/microcms";
+// import { News } from "@/app/_libs/microcms";
 
 // type News = {
 //   id: string;
@@ -14,44 +16,45 @@ import { News } from "@/app/_libs/microcms";
 //   createdAt: string;
 // };
 
-const data: {
-  contents: News[];
-} = {
-  contents: [
-    {
-      id: "1",
-      title: "ニュースタイトル1",
-      category: {
-        name: "カテゴリ1",
-      },
-      publishedAt: "2026/01/01",
-      createdAt: "2026/01/01",
-    },
-    {
-      id: "2",
-      title: "ニュースタイトル2",
-      category: {
-        name: "カテゴリ1",
-      },
-      publishedAt: "2026/01/01",
-      createdAt: "2026/01/01",
-    },
-    {
-      id: "3",
-      title: "ニュースタイトル3",
-      category: {
-        name: "カテゴリ1",
-      },
-      publishedAt: "2026/01/01",
-      createdAt: "2026/01/01",
-    },
-  ],
-};
+// const data: {
+//   contents: News[];
+// } = {
+//   contents: [
+//     {
+//       id: "1",
+//       title: "ニュースタイトル1",
+//       category: {
+//         name: "カテゴリ1",
+//       },
+//       publishedAt: "2026/01/01",
+//       createdAt: "2026/01/01",
+//     },
+//     {
+//       id: "2",
+//       title: "ニュースタイトル2",
+//       category: {
+//         name: "カテゴリ1",
+//       },
+//       publishedAt: "2026/01/01",
+//       createdAt: "2026/01/01",
+//     },
+//     {
+//       id: "3",
+//       title: "ニュースタイトル3",
+//       category: {
+//         name: "カテゴリ1",
+//       },
+//       publishedAt: "2026/01/01",
+//       createdAt: "2026/01/01",
+//     },
+//   ],
+// };
 
-export default function Home() {
+export default async function Home() {
   // const name = "A";
-  const sliceData = data.contents.slice(0, 2);
+  // const sliceData = data.contents.slice(0, 2);
   // const sliceData: News = [];
+  const data = await getNewsList({ limit: TOP_NEWS_LIMIT });
 
   return (
     <>
@@ -105,7 +108,7 @@ export default function Home() {
             </li>
           ))}
         </ul> */}
-        <Newslist news={sliceData} />
+        <Newslist news={data.contents} />
         <div className={styles.newsLink}>
           <ButtonLink href="/news">もっとみる</ButtonLink>
         </div>

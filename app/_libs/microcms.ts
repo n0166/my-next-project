@@ -40,7 +40,7 @@ export type News = {
   title: string;
   description: string;
   content: string;
-  thubmnail?: MicroCMSImage;
+  thumbnail?: MicroCMSImage;
   category: Category;
 } & MicroCMSListContent;
 

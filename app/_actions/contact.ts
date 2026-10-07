@@ -52,49 +52,55 @@ export async function createContactData(_prevState: any, formData: FormData) {
     };
   }
 
-  const result = await fetch(
-    `https://api.hsforms.com/submissions/v3/integration/submit/${process.env.HUBSPOT_PORTAL_ID}/${process.env.HUBSPOT_FORM_ID}`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        fields: [
-          {
-            objectTypeId: "0-1",
-            name: "lastname",
-            value: rawFormData.lastname,
-          },
-          {
-            objectTypeId: "0-1",
-            name: "firstname",
-            value: rawFormData.firstname,
-          },
-          {
-            objectTypeId: "0-1",
-            name: "company",
-            value: rawFormData.company,
-          },
-          {
-            objectTypeId: "0-1",
-            name: "email",
-            value: rawFormData.email,
-          },
-          {
-            objectTypeId: "0-1",
-            name: "message",
-            value: rawFormData.message,
-          },
-        ],
-      }),
-    },
-  );
-
   try {
-    await result.json();
+    const result = await fetch(
+      `https://api.hsforms.com/submissions/v3/integration/submit/${process.env.HUBSPOT_PORTAL_ID}/${process.env.HUBSPOT_FORM_ID}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          fields: [
+            {
+              objectTypeId: "0-1",
+              name: "lastname",
+              value: rawFormData.lastname,
+            },
+            {
+              objectTypeId: "0-1",
+              name: "firstname",
+              value: rawFormData.firstname,
+            },
+            {
+              objectTypeId: "0-1",
+              name: "company",
+              value: rawFormData.company,
+            },
+            {
+              objectTypeId: "0-1",
+              name: "email",
+              value: rawFormData.email,
+            },
+            {
+              objectTypeId: "0-1",
+              name: "message",
+              value: rawFormData.message,
+            },
+          ],
+        }),
+      },
+    );
+
+    if (!result.ok) {
+      console.error(`HubSpot contact submission failed: HTTP ${result.status}`);
+      return {
+        status: "error",
+        message: "お問い合わせに失敗しました",
+      };
+    }
   } catch (e) {
-    console.log(e);
+    console.error("HubSpot contact submission request failed", e);
     return {
       status: "error",
       message: "お問い合わせに失敗しました",

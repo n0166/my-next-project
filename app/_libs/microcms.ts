@@ -1,11 +1,5 @@
 import { createClient } from "microcms-js-sdk";
 import type {
-  MicroCMSImage,
-  MicroCMSListContent,
-  MicroCMSQueries,
-} from "microcms-js-sdk";
-
-export type {
   MicroCMSQueries,
   MicroCMSImage,
   MicroCMSListContent,
@@ -17,20 +11,6 @@ export type Member = {
   profile: string;
   image: MicroCMSImage;
 } & MicroCMSListContent;
-
-// export type Category = {
-//   name: string;
-// };
-
-// export type News = {
-//   id: string;
-//   title: string;
-//   category: {
-//     name: string;
-//   };
-//   publishedAt: string;
-//   createdAt: string;
-// };
 
 export type Category = {
   name: string;
@@ -58,19 +38,19 @@ const client = createClient({
 });
 
 export const getMembersList = async (queries?: MicroCMSQueries) => {
-  const ListData = await client.getList<Member>({
+  const listData = await client.getList<Member>({
     endpoint: "members",
     queries,
   });
-  return ListData;
+  return listData;
 };
 
 export const getNewsList = async (queries?: MicroCMSQueries) => {
-  const ListData = await client.getList<News>({
+  const listData = await client.getList<News>({
     endpoint: "news",
     queries,
   });
-  return ListData;
+  return listData;
 };
 
 export const getNewsDetail = async (
@@ -81,7 +61,13 @@ export const getNewsDetail = async (
     endpoint: "news",
     contentId,
     queries,
+    customRequestInit: {
+      next: {
+        revalidate: queries?.draftKey === undefined ? 60 : 0,
+      },
+    },
   });
+
   return detailData;
 };
 
@@ -94,5 +80,6 @@ export const getCategoryDetail = async (
     contentId,
     queries,
   });
+
   return detailData;
 };

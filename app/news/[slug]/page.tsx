@@ -5,11 +5,10 @@ import Article from "@/app/_components/Article";
 import ButtonLink from "@/app/_components/ButtonLink";
 import styles from "./page.module.css";
 
-// 1. params を Promise 型にする
 type Props = {
-  params: Promise<{
+  params: {
     slug: string;
-  }>;
+  };
   searchParams: {
     dk?: string;
   };
@@ -37,9 +36,7 @@ export async function generateMetadata({
 }
 
 export default async function Page({ params, searchParams }: Props) {
-  // 2. params を await してから slug を取り出す
-  const { slug } = await params;
-  const data = await getNewsDetail(slug, {
+  const data = await getNewsDetail(params.slug, {
     draftKey: searchParams.dk,
   }).catch(notFound);
 

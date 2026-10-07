@@ -58,7 +58,6 @@ export default async function Page() {
                 alt=""
                 width={member.image.width}
                 height={member.image.height}
-                className={styles.image}
               />
               <dl>
                 <dt className={styles.name}>{member.name}</dt>
